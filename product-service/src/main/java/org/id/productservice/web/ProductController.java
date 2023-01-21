@@ -1,6 +1,5 @@
 package org.id.productservice.web;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.id.productservice.dto.RequestProduct;
 import org.id.productservice.dto.ResponsProduct;
 import org.id.productservice.services.ProductServiceI;
@@ -38,8 +37,9 @@ public class ProductController {
         return productServiceI.allProduct();
     }
 
-    @PutMapping("/UpdateProduct/{productId}")
+    @PostMapping("/UpdateProduct/{productId}")
     ResponsProduct updateProduct(@RequestBody RequestProduct requestProduct, @PathVariable Long productId){
+        System.out.println(requestProduct + " le meilleur sur le marché");
         return productServiceI.updateProduct(requestProduct, productId);
     }
 }

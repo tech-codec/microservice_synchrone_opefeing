@@ -44,11 +44,14 @@ public class ProductServiceImpl implements ProductServiceI {
     @Override
     public ResponsProduct updateProduct(RequestProduct requestProduct, Long productId) {
         Product product = productMapper.requestProductToProduct(requestProduct);
+        System.out.println(product + "pour le mapping");
         Product product1 = productRepository.findById(productId).orElse(null);
         product1.setName(product.getName());
         product1.setDescription(product.getDescription());
         product1.setPrice(product.getPrice());
+        System.out.println(product1);
         Product productUpdate = productRepository.save(product1);
+
         return productMapper.productToResponsProduct(productUpdate);
     }
 
