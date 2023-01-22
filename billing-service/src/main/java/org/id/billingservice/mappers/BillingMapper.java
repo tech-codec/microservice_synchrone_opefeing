@@ -5,7 +5,7 @@ import org.id.billingservice.dto.ResponseBilling;
 import org.id.billingservice.entities.Billing;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface BillingMapper {
     Billing requestBilligToBilling(RequestBilling requestBilling);
     ResponseBilling billingToResponseBilling(Billing billing);

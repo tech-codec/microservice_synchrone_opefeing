@@ -5,7 +5,7 @@ import org.id.billingservice.dto.ResponseProductItem;
 import org.id.billingservice.entities.ProductItem;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ProductItemMapper {
     ProductItem requestProductItemToProductItem(RequestProductItem requestProductItem);
     ResponseProductItem productItemToResponseProductItem(ProductItem productItem);
