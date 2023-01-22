@@ -11,9 +11,11 @@ import org.id.billingservice.entities.Customer;
 import org.id.billingservice.entities.Product;
 import org.id.billingservice.entities.ProductItem;
 import org.id.billingservice.mappers.BillingMapper;
+import org.id.billingservice.mappers.ProductItemMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,13 +25,15 @@ import java.util.stream.Collectors;
 public class BillingServiceImpl implements BillingServiceI {
     private BillingRepository billingRepository;
     private ProductItemRepository productItemRepository;
+    private ProductItemMapper productItemMapper;
     private BillingMapper billingMapper;
     private CustomerRestClient customerRestClient;
     private ProductRestClient productRestClient;
 
-    public BillingServiceImpl(BillingRepository billingRepository, ProductItemRepository productItemRepository, BillingMapper billingMapper, CustomerRestClient customerRestClient, ProductRestClient productRestClient) {
+    public BillingServiceImpl(BillingRepository billingRepository, ProductItemRepository productItemRepository, ProductItemMapper productItemMapper, BillingMapper billingMapper, CustomerRestClient customerRestClient, ProductRestClient productRestClient) {
         this.billingRepository = billingRepository;
         this.productItemRepository = productItemRepository;
+        this.productItemMapper = productItemMapper;
         this.billingMapper = billingMapper;
         this.customerRestClient = customerRestClient;
         this.productRestClient = productRestClient;
@@ -58,16 +62,25 @@ public class BillingServiceImpl implements BillingServiceI {
     public ResponseBilling createBilling(RequestBilling requestBilling)
     {
         double amout = 0;
-        Billing billing = billingMapper.requestBilligToBilling(requestBilling);
+        Customer customer = customerRestClient.getCustomer(requestBilling.getCustomerId());
+        Billing billing = new Billing();
+        List<ProductItem> productItems = requestBilling.getProductItems()
+                .stream()
+                .map(requestProductItem -> productItemMapper.requestProductItemToProductItem(requestProductItem))
+                .collect(Collectors.toList());
+        billing.setProductItems(productItems);
         billing.setDate(new Date());
-        for (ProductItem productItem : billing.getProductItems()) {
+        billing.setCustomerId(requestBilling.getCustomerId());
+        for (ProductItem productItem : productItems) {
             amout += productItem.getPrice()*productItem.getQuantity();
             productItem.setBilling(billing);
             productItemRepository.save(productItem);
         }
         billing.setAmount(amout);
         Billing billingSave = billingRepository.save(billing);
-        return billingMapper.billingToResponseBilling(billingSave);
+        ResponseBilling responseBilling = billingMapper.billingToResponseBilling(billingSave);
+        responseBilling.setCustomer(customer);
+        return responseBilling;
     }
 
     @Override

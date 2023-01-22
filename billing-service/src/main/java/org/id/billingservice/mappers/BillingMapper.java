@@ -7,6 +7,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface BillingMapper {
-    Billing requestBilligToBilling(RequestBilling requestBilling);
     ResponseBilling billingToResponseBilling(Billing billing);
 }
