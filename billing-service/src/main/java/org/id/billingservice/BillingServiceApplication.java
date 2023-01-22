@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @SpringBootApplication
-@RestController
 public class BillingServiceApplication {
 
 	public static void main(String[] args) {
@@ -15,10 +14,6 @@ public class BillingServiceApplication {
 	}
 
 
-	@GetMapping("/bonjour")
-	String bonjour(){
-		System.out.println("bonjour les devs");
-		return "bonjour les devs";
-	}
+
 
 }
