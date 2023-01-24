@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(name = "/api")
+@RequestMapping(path = "/api")
 public class ProductItemCotroller {
     private ProductItemServiceI productItemServiceI;
 
