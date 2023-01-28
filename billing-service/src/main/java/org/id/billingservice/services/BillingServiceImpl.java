@@ -68,14 +68,16 @@ public class BillingServiceImpl implements BillingServiceI {
                 .stream()
                 .map(requestProductItem -> productItemMapper.requestProductItemToProductItem(requestProductItem))
                 .collect(Collectors.toList());
-        billing.setProductItems(productItems);
         billing.setDate(new Date());
         billing.setCustomerId(requestBilling.getCustomerId());
         for (ProductItem productItem : productItems) {
             amout += productItem.getPrice()*productItem.getQuantity();
+            Product product = productRestClient.getProduct(productItem.getProductId());
+            productItem.setProduct(product);
             productItem.setBilling(billing);
             productItemRepository.save(productItem);
         }
+        billing.setProductItems(productItems);
         billing.setAmount(amout);
         Billing billingSave = billingRepository.save(billing);
         ResponseBilling responseBilling = billingMapper.billingToResponseBilling(billingSave);

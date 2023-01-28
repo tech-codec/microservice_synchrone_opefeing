@@ -13,6 +13,6 @@ public interface CustomerRestClient {
     @GetMapping("/api/ShowCustomer/{customerId}")
     Customer getCustomer(@PathVariable Long customerId);
 
-    @GetMapping("/api/AllProducts")
+    @GetMapping("/api/AllCustomers")
     List<Customer> getAllCustomer();
 }
