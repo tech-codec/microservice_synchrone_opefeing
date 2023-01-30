@@ -15,4 +15,3 @@ WORKDIR /opt/app
 EXPOSE 8761
 COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
 ENTRYPOINT ["java", "-jar", "/opt/app/*.jar" ]
-
